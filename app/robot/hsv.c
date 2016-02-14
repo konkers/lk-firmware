@@ -34,6 +34,9 @@ void hsv_event(seq_button_t button) {
         case BUTTON_RIGHT:
             x_inc += 2;
             break;
+
+        default:
+            break;
     }
 }
 

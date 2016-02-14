@@ -89,6 +89,14 @@ void life_init(void) {
 }
 
 void life_event(seq_button_t button) {
+    switch (button) {
+        case BUTTON_A:
+            life_init();
+            break;
+
+        default:
+            break;
+    }
 }
 
 static int life_calc_neighbors(int x, int y) {
@@ -110,8 +118,13 @@ static int life_calc_neighbors(int x, int y) {
 void life_frame(void) {
     int x, y;
     uint8_t sub_frame = life_frame_num++ & 0x1f;
+    static bool reset_next = false;
 
     if (sub_frame == 0) {
+        if (reset_next) {
+            life_init();
+            reset_next = false;
+        }
         for (y = 0; y < HEIGHT; y++) {
             for (x = 0; x < WIDTH; x++) {
                 bool alive = life_is_alive(x, y);
@@ -145,12 +158,10 @@ void life_frame(void) {
         }
         if (!memcmp(life_alive, life_new_alive, sizeof(life_alive))
             || !memcmp(life_last_alive, life_new_alive, sizeof(life_alive))) {
-            life_init();
-            return;
-        } else {
-            memcpy(life_last_alive, life_alive, sizeof(life_alive));
-            memcpy(life_alive, life_new_alive, sizeof(life_alive));
+            reset_next = true;
         }
+        memcpy(life_last_alive, life_alive, sizeof(life_alive));
+        memcpy(life_alive, life_new_alive, sizeof(life_alive));
     }
 
     for (y = 0; y < HEIGHT; y++) {

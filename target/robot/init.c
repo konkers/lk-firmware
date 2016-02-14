@@ -67,6 +67,13 @@ void target_early_init(void)
 	/* configure some status leds */
 	gpio_set(GPIO_LED0, 1);
 	gpio_config(GPIO_LED0, GPIO_OUTPUT);
+
+        gpio_set(GPIO_NES_LATCH, 0);
+        gpio_set(GPIO_NES_CLK, 1);
+
+        gpio_config(GPIO_NES_LATCH, GPIO_OUTPUT);
+        gpio_config(GPIO_NES_CLK, GPIO_OUTPUT);
+        gpio_config(GPIO_NES_DATA, GPIO_INPUT);
 }
 
 void target_init(void)

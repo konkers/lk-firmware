@@ -1,5 +1,9 @@
 #include "seq.h"
 
+#include <stdio.h>
+
+#include <compiler.h>
+
 #include "hsv.h"
 #include "life.h"
 
@@ -25,7 +29,16 @@ void seq_init(void) {
 }
 
 void seq_event(seq_button_t button) {
-    seqs[seq_index].event(button);
+    switch (button) {
+        case BUTTON_SELECT:
+            seq_index++;
+            if (seq_index == countof(seqs))
+                seq_index = 0;
+            seqs[seq_index].init();
+
+        default:
+            seqs[seq_index].event(button);
+    }
 }
 
 void seq_frame(void) {

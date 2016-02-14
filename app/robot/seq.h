@@ -6,6 +6,10 @@ typedef enum {
     BUTTON_DOWN,
     BUTTON_LEFT,
     BUTTON_RIGHT,
+    BUTTON_A,
+    BUTTON_B,
+    BUTTON_SELECT,
+    BUTTON_START,
 } seq_button_t;
 
 typedef struct {
