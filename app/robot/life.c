@@ -104,7 +104,7 @@ static int life_calc_neighbors(int x, int y) {
     int num_alive = 0;
     for (dy = -1; dy <= 1; dy++) {
         for (dx = -1; dx <= 1; dx++) {
-            if (dx == x && dy==y) {
+            if (dx == 0 && dy == 0) {
                 continue;
             }
             if (life_is_alive(x + dx, y + dy)) {
