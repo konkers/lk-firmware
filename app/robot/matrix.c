@@ -13,11 +13,13 @@ void matrix_init(void) {
 }
 
 void matrix_set_pixel(uint32_t x, uint32_t y, matrix_color_t color) {
-    uint i = y * WIDTH;
-    if ((y & 0x1) == 0) {
-        i += x;
+    uint32_t x1 = y;
+    uint32_t y1 = WIDTH - x - 1;
+    uint i = y1 * WIDTH;
+    if ((y1 & 0x1) == 0) {
+        i += x1;
     } else {
-        i += WIDTH - 1 - x;
+        i += WIDTH - 1 - x1;
     }
 
     matrix_buf[i+1] = color;

@@ -4,10 +4,16 @@
 
 #include <compiler.h>
 
+#include "heart.h"
 #include "hsv.h"
 #include "life.h"
 
 static seq_t seqs[] = {
+    {
+        .init = heart_init,
+        .event = heart_event,
+        .frame = heart_frame,
+    },
     {
         .init = life_init,
         .event = life_event,
