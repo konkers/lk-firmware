@@ -17,7 +17,16 @@ GLOBAL_DEFINES += \
 
 MODULE_SRCS += \
 	$(LOCAL_DIR)/init.c \
-	$(LOCAL_DIR)/usb.c
+	$(LOCAL_DIR)/usbd_cdc_interface.c \
+	$(LOCAL_DIR)/usbd_conf.c \
+	$(LOCAL_DIR)/usbd_desc.c
+
+#	$(LOCAL_DIR)/usb.c
+
+MODULE_DEPS += \
+        platform/stm32f0xx/STM32F0xx_HAL_Driver \
+        platform/stm32f0xx/STM32_USB_Device_Library/Class/CDC \
+        platform/stm32f0xx/STM32_USB_Device_Library/Core
 
 include make/module.mk
 
