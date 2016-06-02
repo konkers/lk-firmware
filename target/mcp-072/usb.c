@@ -195,8 +195,8 @@ static status_t usb_cb(void *cookie, usb_callback_op_t op, const union usb_callb
     LTRACEF("cookie %p, op %u, args %p\n", cookie, op, args);
 
     if (op == USB_CB_ONLINE) {
-        usbc_setup_endpoint(1, USB_IN, 0x40);
-        usbc_setup_endpoint(1, USB_OUT, 0x40);
+        usbc_setup_endpoint(1, USB_IN, 0x40, USB_BULK);
+        usbc_setup_endpoint(1, USB_OUT, 0x40, USB_BULK);
 
         queue_rx();
         queue_tx();
