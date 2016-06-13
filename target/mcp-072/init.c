@@ -211,9 +211,38 @@ static int cmd_can_test(int argc, const cmd_args *argv) {
     return 0;
 }
 
+float myround(float val) {
+    float div = 10;
+    val *= div;
+    if (val < 0) {
+        val -= 0.5;
+    } else {
+        val += 0.5;
+    }
+    return (int)val / div;
+}
+
 static int cmd_ads_i(int argc, const cmd_args *argv) {
-    int32_t val1 = ads1118_get_internal_temp();
-    printf("%08x %d\n", (uint32_t)val1, val1 >> 8);
+    ads1118_start();
+
+    ads1118_start_internal_temp();
+    while(!ads1118_is_idle()) {}
+
+    int16_t val_int = ads1118_start_tc0();
+    while(!ads1118_is_idle()) {}
+
+    int16_t val_tc0 = ads1118_null_cycle();
+
+    int32_t temp_int = ads1118_convert_internal_temp(val_int);
+    int32_t temp_tc0 = ads1118_convert_tc(val_tc0);
+    int32_t temp = temp_int + temp_tc0;
+    printf("%04x %d\n", (uint32_t)val_int, temp_int / 256);
+    printf("%04x %d %d\n", (uint32_t)val_tc0, val_tc0, temp_tc0 / 256);
+
+    printf("%f %f\n", temp_tc0 / 256.0f, myround(temp_tc0 / 256.0f));
+    printf("%f %f\n", temp / 256.0f, myround(temp / 256.0f));
+
+    ads1118_end();
     return 0;
 }
 STATIC_COMMAND_START
