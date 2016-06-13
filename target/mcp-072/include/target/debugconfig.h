@@ -23,6 +23,6 @@
 #ifndef __TARGET_DEBUGCONFIG_H
 #define __TARGET_DEBUGCONFIG_H
 
-#define DEBUG_UART 2
+#define DEBUG_UART 1
 
 #endif

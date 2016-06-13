@@ -29,9 +29,11 @@
 #include <platform/gpio.h>
 #include <kernel/thread.h>
 #include <platform/can.h>
+#include <platform/dma.h>
 #include <platform/spi.h>
 #include <platform/stm32.h>
 #include <platform/usbc.h>
+#include <target/ads1118.h>
 #include <target/gpioconfig.h>
 #include <lib/console.h>
 #include <stdbool.h>
@@ -139,12 +141,10 @@ void target_early_init(void)
 	gpio_config(GPIO_CAN_TX, GPIO_STM32_AF | GPIO_STM32_AFn(4));
 
         /* configure spi pins */
-#if 1
 	gpio_config(GPIO_SPI1_SCK, GPIO_STM32_AF | GPIO_STM32_AFn(0));
 	gpio_config(GPIO_SPI1_MISO, GPIO_STM32_AF | GPIO_STM32_AFn(0));
 	gpio_config(GPIO_SPI1_MOSI, GPIO_STM32_AF | GPIO_STM32_AFn(0));
 	gpio_set(GPIO_SPI1_NCSS, 1);
-#endif
 	gpio_config(GPIO_SPI1_NCSS, GPIO_OUTPUT);
 
 	stm32_debug_early_init();
@@ -155,22 +155,14 @@ void target_early_init(void)
 	gpio_set(GPIO_LED1, 1);
 	gpio_config(GPIO_LED1, GPIO_OUTPUT);
 
-        //stm32_usbc_early_init(STM32_USB_CLK_PLL);
-        //
 }
 
 void target_init(void)
 {
     stm32_debug_init();
-    stm32_usbc_init();
-#if 0
-    spi_init(SPI_DATA_SIZE_8,
-             SPI_CPOL_LOW,
-             SPI_CPHA_1,
-             SPI_BIT_ORDER_MSB,
-             SPI_PRESCALER_64);
-#endif
-    target_usb_setup();
+    //stm32_usbc_init();
+    ads1118_init(GPIO_SPI1_NCSS, GPIO_SPI1_MISO);
+    //target_usb_setup();
 
     can_init(true);
 
@@ -219,8 +211,14 @@ static int cmd_can_test(int argc, const cmd_args *argv) {
     return 0;
 }
 
+static int cmd_ads_i(int argc, const cmd_args *argv) {
+    int32_t val1 = ads1118_get_internal_temp();
+    printf("%08x %d\n", (uint32_t)val1, val1 >> 8);
+    return 0;
+}
 STATIC_COMMAND_START
 STATIC_COMMAND("can_test", "can tests", &cmd_can_test)
+STATIC_COMMAND("ads_i", "ads1118 internal temperature", &cmd_ads_i)
 STATIC_COMMAND_END(mcp);
 
 #if 0
